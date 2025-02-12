@@ -1,165 +1,88 @@
-# 🚀 Test Automation Framework using Playwright & Pytest
+# Test Automation Site E2E
 
-## 📌 Overview
+## Overview
 
-This is an end-to-end (E2E) test automation framework built using **Python**, **Playwright**, and **Pytest**. It
-supports **parallel execution** using `pytest-xdist` and dynamically generates test users via API.
+This project is an End-to-End (E2E) automation framework for testing an e-commerce website. It includes user
+authentication, shopping, cart management, checkout, and order confirmation.
 
----
+## Recent Updates
 
-## 🛠 Tech Stack
+### **1. Using CSV for Product Selection**
 
-- **Python 3.12**
-- **Playwright** (for UI Automation)
-- **Pytest** (for test execution)
-- **pytest-xdist** (for parallel execution)
-- **pytest-check** (for soft assertions)
-- **JSON** (for test data management)
+- Products are now stored in `FinalRun/UIUtils/products.csv`.
+- The test script reads this CSV and selects random products for each user.
 
----
+### **2. Random Product Selection for Each User**
 
-## 📂 Project Structure
+- Instead of using hardcoded product lists, we now use `sample()` from `random` to pick **3 random products** from the
+  CSV file.
+- This ensures test variability and better coverage.
+- Fixed issue where `random.sample()` caused an `AttributeError` by using:
+  ```python
+  from random import sample
+  ```
+
+### **3. Fixed Random Module Issue**
+
+- Issue: `AttributeError: 'builtin_function_or_method' object has no attribute 'sample'`.
+- Fix: Instead of importing the entire `random` module, we now use:
+  ```python
+  from random import sample
+  ```
+- This avoids conflicts if `random` is accidentally shadowed in the script.
+
+## Project Structure
 
 ```
-TestAutomationSite_e2e/
-│── APIutils/
-│   ├── create_user.py   # API utility to create test users
-│── Pages/
-│   ├── login.py         # Login page actions
-│   ├── checkout.py      # Checkout page actions
-│   ├── addProducts.py   # Add products to cart
-│   ├── PlaceOrder.py    # Order confirmation handling
-│── data/
-│   ├── usercredentials.json  # User credentials for test execution
-│── test_runner.py       # Main test execution file
-│── conftest.py          # Fixture setup for browser and user management
-│── README.md            # Project documentation
+FinalRun/
+├── Pages/
+│   ├── login.py
+│   ├── gotoShop.py
+│   ├── addProductsinShop.py
+│   ├── viewcart.py
+│   ├── checkout.py
+│   ├── PlaceOrder.py
+│
+├── UIUtils/
+│   ├── browserUtils.py
+│   ├── dataUtils.py
+│   ├── products.csv  # New CSV file for products
+│
+├── test_runner.py
+├── conftest.py
+├── requirements.txt
 ```
 
----
+## How to Run Tests
 
-## 📥 Installation
-
-### **1️⃣ Clone the Repository**
-
-```sh
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
-```
-
-### **2️⃣ Create & Activate Virtual Environment**
-
-```sh
-python -m venv venv
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
-```
-
-### **3️⃣ Install Dependencies**
-
+Ensure dependencies are installed:
 ```sh
 pip install -r requirements.txt
-playwright install
 ```
 
----
-
-## 🚀 Running Tests
-
-### **1️⃣ Run Tests Sequentially**
-
+Run tests using `pytest`:
 ```sh
-pytest FinalRun/test_runner.py -s
+pytest test_runner.py --capture=no
 ```
 
-### **2️⃣ Run Tests in Parallel (Using `pytest-xdist`**)
+## Debugging Tips
 
-```sh
-pytest -n 4  # Run tests on 4 parallel workers
-pytest -n auto  # Use all available CPU cores
-```
+- If you face `random.sample()` errors:
+    - Ensure `from random import sample` is used instead of `import random`.
+    - Restart PyCharm/Python to clear cached issues.
+- If test data is missing:
+    - Verify `products.csv` has at least 3 products.
+- Use verbose mode to debug:
+  ```sh
+  pytest test_runner.py -v --capture=no
+  ```
 
-### **3️⃣ Run Tests with HTML Report**
+## Next Improvements
 
-```sh
-pytest --html=report.html --self-contained-html
-```
-
----
-
-## 🔄 Dynamic User Creation via API
-
-Before tests start, users are **created dynamically via API** and then used for test execution.
-
-- User details are stored in `data/usercredentials.json`
-- Users are created via `create_user.py`
-- If a user **already exists**, it is skipped
+- **Dynamic product selection**: Randomly vary the number of products selected (`k`) instead of always 3.
+- **Parallel execution**: Run tests in parallel using `pytest-xdist` to improve speed.
+- **Better error handling**: Improve logging when reading CSV files.
 
 ---
-
-## 🛠 Troubleshooting
-
-### **1️⃣ Locator Timeout Issue**
-
-If elements take time to appear:
-
-```python
-self.page.wait_for_selector("#place-order-button", timeout=60000)
-```
-
-### **2️⃣ Test Failed Due to "User Already Exists"
-
-Modify `create_user.py` to handle this gracefully:
-
-```python
-if response.status == 400 and "user_exists" in response.json().get("code", ""):
-    print("User already exists, skipping creation.")
-```
-
-### **3️⃣ Browser Not Closing After Each Test**
-
-Ensure browser fixture is correctly closing in `conftest.py`:
-
-```python
-yield browser_instance
-browser_instance.browser.close()
-```
-
----
-
-## 📌 Contributing
-
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit changes: `git commit -m "Added new feature"`
-4. Push to GitHub: `git push origin feature-name`
-5. Open a Pull Request 🚀
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License**.
-
----
-
-## 📧 Contact
-
-For any questions, reach out at [**suniljeurkar@gmail.com**](suniljeurkar@gmail.com) or create an issue on GitHub.
-
----
-
-## ⚠️ Disclaimer
-
-This website (`https://testautomationsite.in/`) has been hosted solely by me for demonstrating coding skills and
-automation testing capabilities. It is intended for testing purposes only and may not be available in the future. Any
-changes, interruptions, or unavailability of the site should be expected. The author holds no responsibility for any
-external dependencies or third-party services linked to this project.
-
----
-
-🚀 Happy Testing! 🎯
+🚀 Happy Testing! Let me know if you need further updates!
 
