@@ -13,6 +13,7 @@ from FinalRun.Pages.viewcart import ViewCart
 from FinalRun.UIUtils.dataUtils import userCreds_2
 
 
+# for running use pytest .\FinalRun\test_runner.py --browser-name=firefox/chromium/edge
 # from random import random has some issue , so directly imported sample
 # This solved the error
 

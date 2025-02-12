@@ -1,11 +1,4 @@
 import time
-from playwright.sync_api import Playwright
-import pytest
-
-from FinalRun.APIutils.create_user import create_users
-from FinalRun.UIUtils.browserUtils import BrowserInstance
-from FinalRun.UIUtils.dataUtils import userCreds_2
-import time
 
 import pytest
 from playwright.sync_api import Playwright
@@ -15,11 +8,15 @@ from FinalRun.UIUtils.browserUtils import BrowserInstance
 from FinalRun.UIUtils.dataUtils import userCreds_2
 
 
-@pytest.fixture(scope="session", autouse=True)
+# addoption is used to add CLI to project for dynamic selection
+def pytest_addoption(parser):
+    parser.addoption("--browser-name", action="store", default="chrome",
+                     help="Choose browser: chrome, firefox, edge")
+
+
+@pytest.fixture(scope="session", autouse=True)  #autouse automatically applies fixutres to all tests within scope
 def create_users_before_tests(playwright: Playwright):
-    #
     print("\n🔹 Creating Users via API before test execution...")
-
     created_users = []  # List to store created users
 
     for user in userCreds_2():
@@ -29,9 +26,10 @@ def create_users_before_tests(playwright: Playwright):
 
 
 @pytest.fixture(scope="function")
-def browser(playwright: Playwright):
-    """Setup browser"""
-    browser_instance = BrowserInstance(playwright)
+def browser(request, playwright: Playwright):
+    # Setup Browser
+    browser_select = request.config.getoption("--browser-name")
+    browser_instance = BrowserInstance(playwright, browser_select)
     yield browser_instance
     print("Closing the browser")  # for debugging , the browser is not closing after first test is complete
     browser_instance.browser.close()

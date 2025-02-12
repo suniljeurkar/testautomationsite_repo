@@ -1,88 +1,92 @@
-# Test Automation Site E2E
+# 📌 Test Automation Site E2E - README
 
-## Overview
+## 🚀 New Feature: CLI-Based Browser Selection
 
-This project is an End-to-End (E2E) automation framework for testing an e-commerce website. It includes user
-authentication, shopping, cart management, checkout, and order confirmation.
+### 🎯 **Overview**
 
-## Recent Updates
-
-### **1. Using CSV for Product Selection**
-
-- Products are now stored in `FinalRun/UIUtils/products.csv`.
-- The test script reads this CSV and selects random products for each user.
-
-### **2. Random Product Selection for Each User**
-
-- Instead of using hardcoded product lists, we now use `sample()` from `random` to pick **3 random products** from the
-  CSV file.
-- This ensures test variability and better coverage.
-- Fixed issue where `random.sample()` caused an `AttributeError` by using:
-  ```python
-  from random import sample
-  ```
-
-### **3. Fixed Random Module Issue**
-
-- Issue: `AttributeError: 'builtin_function_or_method' object has no attribute 'sample'`.
-- Fix: Instead of importing the entire `random` module, we now use:
-  ```python
-  from random import sample
-  ```
-- This avoids conflicts if `random` is accidentally shadowed in the script.
-
-## Project Structure
-
-```
-FinalRun/
-├── Pages/
-│   ├── login.py
-│   ├── gotoShop.py
-│   ├── addProductsinShop.py
-│   ├── viewcart.py
-│   ├── checkout.py
-│   ├── PlaceOrder.py
-│
-├── UIUtils/
-│   ├── browserUtils.py
-│   ├── dataUtils.py
-│   ├── products.csv  # New CSV file for products
-│
-├── test_runner.py
-├── conftest.py
-├── requirements.txt
-```
-
-## How to Run Tests
-
-Ensure dependencies are installed:
-```sh
-pip install -r requirements.txt
-```
-
-Run tests using `pytest`:
-```sh
-pytest test_runner.py --capture=no
-```
-
-## Debugging Tips
-
-- If you face `random.sample()` errors:
-    - Ensure `from random import sample` is used instead of `import random`.
-    - Restart PyCharm/Python to clear cached issues.
-- If test data is missing:
-    - Verify `products.csv` has at least 3 products.
-- Use verbose mode to debug:
-  ```sh
-  pytest test_runner.py -v --capture=no
-  ```
-
-## Next Improvements
-
-- **Dynamic product selection**: Randomly vary the number of products selected (`k`) instead of always 3.
-- **Parallel execution**: Run tests in parallel using `pytest-xdist` to improve speed.
-- **Better error handling**: Improve logging when reading CSV files.
+We have introduced a new **command-line interface (CLI) feature** that allows users to dynamically select the browser
+for test execution. This feature enhances flexibility and enables testing across multiple browsers without modifying the
+code.
 
 ---
-🚀 Happy Testing! Let me know if you need further updates!
+
+## 🔹 **New CLI Argument: `--browser-name`**
+
+| Browser Name (CLI Argument) | Playwright Equivalent |
+|-----------------------------|-----------------------|
+| `chromium`                  | Chromium (Default)    |
+| `firefox`                   | Firefox               |
+| `webkit`                    | Webkit (Safari)       |
+
+### ✅ **Usage**
+
+Run tests with a specific browser using the following command:
+
+```sh
+pytest .\FinalRun\test_runner.py --browser-name=firefox
+```
+
+Example for Chromium:
+
+```sh
+pytest .\FinalRun\test_runner.py --browser-name=chromium
+```
+
+---
+
+## 🔧 **Implementation Details**
+
+### 📌 **Changes in `conftest.py`**
+
+- Added `pytest_addoption` to accept `--browser-name` as a CLI argument.
+- Updated the `browser` fixture to dynamically launch the specified browser.
+
+### 📌 **Changes in `browserUtils.py`**
+
+- Modified `BrowserInstance` to accept the browser type and initialize it accordingly.
+- Allowed "chrome" as an alias for "chromium" to enhance usability.
+
+---
+
+## 🛠 **Additional Fixes & Enhancements**
+
+### ✅ **Improved API User Creation Handling**
+
+- The framework now skips user creation if a user already exists, preventing redundant API calls and test failures.
+
+### ✅ **Registered Pytest Marks (`smoke`, `regression`)**
+
+- Added `pytest.ini` configurations to avoid warnings when using `@pytest.mark.smoke` and `@pytest.mark.regression`.
+
+```ini
+[pytest]
+markers =
+    smoke: Smoke tests
+    regression: Regression tests
+```
+
+---
+
+## 📜 **How to Run Tests**
+
+1. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+2. Run tests with the desired browser:
+   ```sh
+   pytest .\FinalRun\test_runner.py --browser-name=chromium
+   ```
+
+---
+
+## 📢 **Next Steps**
+
+- Implement headless mode support for faster execution.
+- Add logging and reporting for better debugging.
+- Integrate with CI/CD pipelines for automated test execution.
+
+---
+
+🔹 *For any issues or contributions, feel free to raise a pull request or open an issue!* 🚀
 
