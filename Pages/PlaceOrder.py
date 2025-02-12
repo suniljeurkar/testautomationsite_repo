@@ -1,5 +1,7 @@
-from finalCode_testautomationsite.conftest import BrowserInstance
+
 from playwright.sync_api import expect
+
+from FinalRun.UIUtils.browserUtils import BrowserInstance
 
 
 class PlaceOrder():

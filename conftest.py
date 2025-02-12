@@ -1,10 +1,18 @@
 import time
+from playwright.sync_api import Playwright
+import pytest
+
+from FinalRun.APIutils.create_user import create_users
+from FinalRun.UIUtils.browserUtils import BrowserInstance
+from FinalRun.UIUtils.dataUtils import userCreds_2
+import time
 
 import pytest
-from finalCode_testautomationsite.APIutils.create_user import create_users
-from finalCode_testautomationsite.UIUtils.browserUtils import BrowserInstance
-from finalCode_testautomationsite.UIUtils.dataUtils import userCreds_2
 from playwright.sync_api import Playwright
+
+from FinalRun.APIutils.create_user import create_users
+from FinalRun.UIUtils.browserUtils import BrowserInstance
+from FinalRun.UIUtils.dataUtils import userCreds_2
 
 
 @pytest.fixture(scope="session", autouse=True)

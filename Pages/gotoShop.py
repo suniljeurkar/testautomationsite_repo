@@ -1,4 +1,4 @@
-from finalCode_testautomationsite.conftest import BrowserInstance
+from FinalRun.UIUtils.browserUtils import BrowserInstance
 
 
 class ShopPage:

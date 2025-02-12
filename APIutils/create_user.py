@@ -1,7 +1,8 @@
 import pytest
 import pytest_check as check
-from finalCode_testautomationsite.UIUtils.dataUtils import userCreds_2
 from playwright.sync_api import Playwright
+
+from FinalRun.UIUtils.dataUtils import userCreds_2
 
 
 @pytest.mark.parametrize('userCreds', userCreds_2())

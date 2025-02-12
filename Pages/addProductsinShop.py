@@ -1,6 +1,7 @@
 import time
 
-from finalCode_testautomationsite.conftest import BrowserInstance, UtilsConf
+from FinalRun.UIUtils.browserUtils import BrowserInstance
+from FinalRun.conftest import UtilsConf
 
 
 class AddtoCart:
@@ -8,7 +9,7 @@ class AddtoCart:
     def __init__(self, browser_instance: BrowserInstance):
         self.user_details = None
         self.page = browser_instance.get_page()
-        self.products_to_add = ["Album", "Beanie with Logo", "Hoodie with Zipper"]
+        # self.products_to_add = ["Album", "Beanie with Logo", "Hoodie with Zipper"] # Sending via testrunner now
         self.utils = UtilsConf(browser_instance)
 
     def add_products_to_cart(self, products_to_add):

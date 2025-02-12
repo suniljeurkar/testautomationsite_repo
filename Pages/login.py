@@ -1,4 +1,5 @@
-from finalCode_testautomationsite.conftest import userCreds_2, BrowserInstance
+from FinalRun.UIUtils.browserUtils import BrowserInstance
+from FinalRun.UIUtils.dataUtils import userCreds_2
 
 
 class LoginPage:
