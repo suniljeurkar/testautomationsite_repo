@@ -3,26 +3,27 @@ import time
 import pytest
 from playwright.sync_api import Playwright
 
-from FinalRun.APIutils.create_user import create_users
 from FinalRun.UIUtils.browserUtils import BrowserInstance
 from FinalRun.UIUtils.dataUtils import userCreds_2
 
 
 # addoption is used to add CLI to project for dynamic selection
 def pytest_addoption(parser):
-    parser.addoption("--browser-name", action="store", default="chrome",
+    parser.addoption("--browser-name", action="store", default="chromium",
                      help="Choose browser: chrome, firefox, edge")
 
 
 @pytest.fixture(scope="session", autouse=True)  #autouse automatically applies fixutres to all tests within scope
 def create_users_before_tests(playwright: Playwright):
-    print("\n🔹 Creating Users via API before test execution...")
-    created_users = []  # List to store created users
+    # print("\n🔹 Creating Users via API before test execution...") #Skipping for user creation , running on json
+    # created_users = []  # List to store created users #Skipping for user creation , running on json
 
-    for user in userCreds_2():
-        user_data = create_users(playwright, user)  # Call API to create user
-        created_users.append(user_data)  # Store created user credentials
+    # for user in userCreds_2():
+    #     user_data = create_users(playwright, user)  # Call API to create user
+    #     created_users.append(user_data)  # Store created user credentials
+    created_users = userCreds_2()
     return created_users  # Return created users
+
 
 
 @pytest.fixture(scope="function")
