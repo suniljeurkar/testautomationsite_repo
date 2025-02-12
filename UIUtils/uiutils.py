@@ -1,7 +1,11 @@
+# This is initial Ui Utility file designed for sole reason of checking integrity of code
+# Later it was shifted to /Pages/... to accomodate page model
+# Please ignore this file.
 import time
 
-from finalCode_testautomationsite.conftest import userCreds_2
 from playwright.sync_api import Playwright, expect
+
+from FinalRun.UIUtils.dataUtils import userCreds_2
 
 
 class UiUtilities:
